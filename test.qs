@@ -2,7 +2,16 @@
 
 //Namespace for quantum static functions for use.
 namespace quantumStaticFunc {
-    //
+    
+    operation getResult(qub: Qubit):Result {
+        H(qub);
+        return M(qub);
+    }
+
+    operation adamar(qub: Qubit): Unit is Adj {
+        H(qub);
+        X(qub);
+    }
 }
 
 //Namespace for non-quantum static functions for use.
@@ -38,15 +47,19 @@ namespace staticFunc {
 
 //Entry point namespace.
 namespace Main {
-    open staticFunc;
-    open quantumStaticFunc;
+    import Std.Diagnostics.DumpMachine;
+    open staticFunc as classicFuncs;
+    open quantumStaticFunc as quantumFuncs;
 
     // Entry point of the program.
     @EntryPoint()
     operation main(): Unit {
         use qubit1 = Qubit();
         use qubit2 = Qubit();
-        let res = getCirleSquare(2.0);
-        Message($"Result of the circle square is {res}") ;
+        let res = classicFuncs.getCirleSquare(2.0);
+        Message($"Result of the circle square is {res}");
+        quantumFuncs.adamar(qubit1);
+        quantumFuncs.getResult(qubit2);
+        DumpMachine();
     }
 }
